@@ -2,19 +2,51 @@ package Client;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 class Client {
+
+        Socket serverSocket; 
+        private String username = "";
+
         public static void main(String[] args) throws Exception {
-               String sentence;
-               String modifiedSentence;
-               BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-               Socket clientSocket = new Socket("localhost", 6789);
-               DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-               BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-               sentence = inFromUser.readLine();
-               outToServer.writeBytes(sentence + '\n');
-               modifiedSentence = inFromServer.readLine();
-               System.out.println("FROM SERVER: " + modifiedSentence);
-               clientSocket.close();
+
+                Client client = new Client();
+                getAndParseInput(client);
+
+        }
+
+        private void connect(String hostname, short port) {
+               try {
+                        serverSocket = new Socket(hostname, port);
+                        System.out.println("Established connection with " +
+                                serverSocket.getInetAddress().getHostAddress() +
+                                ":" + serverSocket.getPort());
+
+               } catch (IOException error) {
+                        System.out.println("IOException: " + error.getMessage());
+               }
+        }
+
+        private static void getAndParseInput(Client client) {
+                Scanner scanner = new Scanner(System.in);
+                String command = "";
+
+                while(true) {
+                        command = scanner.nextLine();
+
+                        switch(command) {
+                        case "/connect":
+                                client.connect("localhost", (short)1210);
+                                break;
+                        case "/quit":
+                                scanner.close();
+                                return;
+                        default:
+                                System.out.println("Error, not a command");
+
+                        }
+
+                }
         }
 }
