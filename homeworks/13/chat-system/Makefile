@@ -1,10 +1,10 @@
 all: Server Client
 
 Server:
-	javac ./src/$@/$@.java
+	javac ./src/$@/$@.java -Xlint
 
 Client:
-	javac ./src/$@/$@.java
+	javac ./src/$@/$@.java -Xlint
 
 run_server:
 	java -classpath ./src Server.Server
