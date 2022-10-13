@@ -67,9 +67,13 @@ class Client {
                                         // TODO: parse and pass parameters
                                         client.connect(args[1], Short.parseShort(args[2]));
                                 } else if (command.startsWith("/quit")) {
-                                        serverOutput.writeBytes("/quit");
+                                        serverOutput.writeBytes("/quit\n");
                                         scanner.close();
                                         return;
+                                } else if (command.startsWith("/msg ")) {
+                                        serverOutput.writeBytes(command + '\n');
+                                } else if (command.startsWith("/nick ")) {
+                                        serverOutput.writeBytes(command + '\n');
                                 } else {
                                         System.out.println("Error, not a command");
                                 }
@@ -84,7 +88,7 @@ class Client {
 
         private static void receiveFromServer() {
                 receiverThread = new Thread(() -> {
-                        while (serverSocket.isClosed() == false) {
+                        while (serverSocket != null && serverSocket.isClosed() == false) {
                                 String inputLine = "";
                                 try {
                                         if ((inputLine = serverInput.readLine()) == null) {
@@ -106,6 +110,10 @@ class Client {
                                         if (inputLine.equals("/expire")) {
                                                 System.out.println("Session expired");
                                                 closeConnection();
+                                        }
+
+                                        if (inputLine.startsWith("/msg")) {
+                                                System.out.println(inputLine.replaceFirst("/msg", ""));                                
                                         }
                                 }
                         }

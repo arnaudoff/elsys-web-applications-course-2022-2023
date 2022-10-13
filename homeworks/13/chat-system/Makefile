@@ -1,17 +1,24 @@
-all: Server Client
+JC=javac
+JCFLAGS=-Xlint
 
-Server:
-	javac ./src/$@/$@.java -Xlint
+JI=java
+JIFLAGS=-classpath ./src
 
-Client:
-	javac ./src/$@/$@.java -Xlint
+SRC=$(wildcard ./src/*/*.java)
+CLS=$(SRC:.java=.class)
+
+.PHONY: all
+all: $(CLS) 
+
+%.class: %.java
+	$(JC) $(JCFLAGS) $<
 
 run_server:
-	java -classpath ./src Server.Server
+	$(JI) $(JIFLAGS) Server.Server
 
 run_client:
-	java -classpath ./src Client.Client
+	$(JI) $(JIFLAGS) Client.Client
 
-.PHONY:
+.PHONY: clear
 clear:
 	rm -rf ./src/*/*.class

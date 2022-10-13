@@ -2,6 +2,7 @@ package Server;
 
 import java.io.*;
 import java.net.*;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -10,12 +11,13 @@ class Server {
 
         private ServerSocket serverSocket;
         private short port;
-        private List<Socket> clients;
-        // private Map clients<String, IP>
+        private List<ClientThread> clients;
+        private Map<String, String> clientMap;
 
         public Server(short port) {
                 this.port = port;
-                clients = new ArrayList<Socket>();
+                clients = new ArrayList<ClientThread>();
+                clientMap = new HashMap<String, String>();
         }
 
         public static void main(String argv[]) throws Exception {
@@ -30,14 +32,14 @@ class Server {
 
                         while (serverSocket.isClosed() == false) {
                                 Socket clientSocket = serverSocket.accept();
-                                clientSocket.setSoTimeout(4 * 1000);
+                                clientSocket.setSoTimeout(60 * 1000);
                                 clientSocket.setKeepAlive(true);
 
                                 printSocket("Established connection with ", clientSocket, "");
-                                clients.add(clientSocket);
 
                                 // start thread
-                                new ClientThread(clientSocket).start();
+                                ClientThread clientThread = new ClientThread(clientSocket);
+                                clientThread.start();
                         }
                 } catch (IOException error) {
                         System.out.println("IOException: " + error.getMessage());
@@ -49,6 +51,21 @@ class Server {
                 System.out.println(header + socketInfo + tail);
         }
 
+        private void broadcastMsg(String msg) {
+                for (ClientThread clientThread : clients) {
+                        // TODO: also send to sender with the added time stamp
+                        try {
+                                clientThread.clientOutput.writeBytes(msg);
+                        } catch (IOException error) {
+                                System.out.println("IOException: " + error.getMessage());
+                                error.printStackTrace();
+                        }
+                }
+        }
+
+        private String getClientMapKey(Socket clientSocket) {
+                return clientSocket.getInetAddress().getHostAddress() + Integer.toString(clientSocket.getPort());
+        }
 
         public class ClientThread extends Thread {
 
@@ -58,6 +75,7 @@ class Server {
 
                 public ClientThread(Socket clientSocket) {
                         this.clientSocket = clientSocket;
+                        clientMap.put(getClientMapKey(clientSocket), clientSocket.getInetAddress().getHostAddress() + ":" + Integer.toString(clientSocket.getPort()));
 
                         try {
                                 clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -88,6 +106,16 @@ class Server {
                                         if (inputLine.startsWith("/quit")) {
                                                 printSocket("Destroyed connection with ", clientSocket, "");
                                                 break;
+                                        } else if (inputLine.startsWith("/msg")) {
+                                                // TODO: add time stamp
+                                                inputLine += " " + clientMap.get(getClientMapKey(clientSocket));
+                                                System.out.println("[RECEIVED]" + inputLine);
+                                                clientOutput.writeBytes(inputLine + '\n');
+                                                broadcastMsg(inputLine);
+                                        } else if (inputLine.startsWith("/nick")) {
+                                                inputLine = inputLine.replaceFirst("/nick", "").trim();
+                                                clientMap.put(getClientMapKey(clientSocket), inputLine);
+                                                // TODO: update all other clients that one changed their nick
                                         }
                                         // TODO: more commands
                                 }
@@ -106,8 +134,8 @@ class Server {
                                 error.printStackTrace();
                         }
                         
-
-                        clients.remove(clientSocket);
+                        clients.remove(this);
+                        clientMap.remove(getClientMapKey(clientSocket));
                         closeConnection();
                 }
         }
