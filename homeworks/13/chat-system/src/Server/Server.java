@@ -30,7 +30,7 @@ class Server {
 
                         while (serverSocket.isClosed() == false) {
                                 Socket clientSocket = serverSocket.accept();
-                                clientSocket.setSoTimeout(2 * 1000);
+                                clientSocket.setSoTimeout(4 * 1000);
                                 clientSocket.setKeepAlive(true);
 
                                 printSocket("Established connection with ", clientSocket, "");
@@ -73,7 +73,6 @@ class Server {
                                 clientSocket.close();
                                 clientInput.close();
                                 clientOutput.close();
-                                // TODO: remove client socket from arraylist
                         } catch (IOException error) {
                                 System.out.println("IOException: " + error.getMessage());
                                 error.printStackTrace();
@@ -87,7 +86,7 @@ class Server {
                         try {
                                 while ((inputLine = clientInput.readLine()) != null) {
                                         if (inputLine.startsWith("/quit")) {
-                                                printSocket("Destroyed connection with", clientSocket, "");
+                                                printSocket("Destroyed connection with ", clientSocket, "");
                                                 break;
                                         }
                                         // TODO: more commands
@@ -96,6 +95,12 @@ class Server {
                                 System.out.println("SocketException: " + error);
                         } catch (SocketTimeoutException timeout) {
                                 printSocket("", clientSocket, " Session's expired");
+                                try {
+                                        clientOutput.writeBytes("/expire");
+                                } catch (IOException error) {
+                                        System.out.println("IOException: " + error.getMessage());
+                                        error.printStackTrace();
+                                }
                         } catch (IOException error) {
                                 System.out.println("IOException: " + error.getMessage());
                                 error.printStackTrace();
