@@ -28,8 +28,6 @@ public class Client implements Runnable{
                 }
                 client = new Socket(IP, port);
 
-//             client = new Socket("127.0.0.1", 9999);
-
                 out = new PrintWriter( client.getOutputStream(),true);
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
@@ -96,11 +94,7 @@ public class Client implements Runnable{
                     }else{
                         out.println(message);
                     }
-//                    else if (message.startsWith("/msg ")){
-//                        out.println(message);
-//                    }
-//                    else if
-                }
+
             } catch (Exception e) {
                 shutdown();
             }
