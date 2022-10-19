@@ -35,7 +35,6 @@ public class Server implements Runnable{
 
             }
         } catch (IOException e) {
-            //e.printStackTrace();
         shutdown();
         }
     }
@@ -60,7 +59,7 @@ public class Server implements Runnable{
                 ch.shutdown();
             }
         } catch (IOException e) {
-            //ignore
+      
         }
     }
 
@@ -82,11 +81,7 @@ public class Server implements Runnable{
             try {
                 output = new PrintWriter(client.getOutputStream(), true);
                 input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                //for input
-//                input.readLine();
-                //for output
-//                output.println("Hello");
-
+      
                 output.println("Please enter nickname: ");
                 nickname = input.readLine();
                 System.out.println(nickname + " connected");
