@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 class Server {
 
@@ -13,11 +15,15 @@ class Server {
         private short port;
         private static List<ClientThread> clients;
         private static Map<String, String> clientMap;
+        private static DateTimeFormatter dtf;
+        private static LocalDateTime now;
 
         public Server(short port) {
                 this.port = port;
                 clients = new ArrayList<ClientThread>();
                 clientMap = new HashMap<String, String>();
+                dtf = DateTimeFormatter.ofPattern("hh:mm:ss");
+                now = LocalDateTime.now();
         }
 
         public static void main(String argv[]) throws Exception {
@@ -109,16 +115,13 @@ class Server {
                                                 printSocket("Destroyed connection with ", clientSocket, "");
                                                 break;
                                         } else if (inputLine.startsWith("/msg")) {
-                                                // TODO: add time stamp
                                                 inputLine = inputLine.replaceFirst("/msg", "/msg[" + clientMap.get(getClientMapKey(clientSocket)) + "] ");
                                                 System.out.println("[RECEIVED]" + inputLine);
-                                                broadcastMsg(inputLine);
+                                                broadcastMsg(inputLine + " (" + dtf.format(now) + ")");
                                         } else if (inputLine.startsWith("/nick")) {
                                                 inputLine = inputLine.replaceFirst("/nick", "").trim();
                                                 clientMap.put(getClientMapKey(clientSocket), inputLine);
-                                                // TODO: update all other clients that one changed their nick
                                         }
-                                        // TODO: more commands
                                 }
                         } catch (SocketException error) {
                                 System.out.println("SocketException: " + error);
