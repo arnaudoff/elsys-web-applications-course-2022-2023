@@ -11,8 +11,8 @@ class Server {
 
         private ServerSocket serverSocket;
         private short port;
-        private List<ClientThread> clients;
-        private Map<String, String> clientMap;
+        private static List<ClientThread> clients;
+        private static Map<String, String> clientMap;
 
         public Server(short port) {
                 this.port = port;
@@ -39,6 +39,7 @@ class Server {
 
                                 // start thread
                                 ClientThread clientThread = new ClientThread(clientSocket);
+                                clients.add(clientThread);
                                 clientThread.start();
                         }
                 } catch (IOException error) {
@@ -52,10 +53,11 @@ class Server {
         }
 
         private void broadcastMsg(String msg) {
+                System.out.println(clients.size());
                 for (ClientThread clientThread : clients) {
                         // TODO: also send to sender with the added time stamp
                         try {
-                                clientThread.clientOutput.writeBytes(msg);
+                                clientThread.clientOutput.writeBytes(msg + "\n");
                         } catch (IOException error) {
                                 System.out.println("IOException: " + error.getMessage());
                                 error.printStackTrace();
@@ -108,9 +110,8 @@ class Server {
                                                 break;
                                         } else if (inputLine.startsWith("/msg")) {
                                                 // TODO: add time stamp
-                                                inputLine += " " + clientMap.get(getClientMapKey(clientSocket));
+                                                inputLine = inputLine.replaceFirst("/msg", "/msg[" + clientMap.get(getClientMapKey(clientSocket)) + "] ");
                                                 System.out.println("[RECEIVED]" + inputLine);
-                                                clientOutput.writeBytes(inputLine + '\n');
                                                 broadcastMsg(inputLine);
                                         } else if (inputLine.startsWith("/nick")) {
                                                 inputLine = inputLine.replaceFirst("/nick", "").trim();
@@ -124,7 +125,7 @@ class Server {
                         } catch (SocketTimeoutException timeout) {
                                 printSocket("", clientSocket, " Session's expired");
                                 try {
-                                        clientOutput.writeBytes("/expire");
+                                        clientOutput.writeBytes("/expire\n");
                                 } catch (IOException error) {
                                         System.out.println("IOException: " + error.getMessage());
                                         error.printStackTrace();
