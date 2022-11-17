@@ -1,0 +1,16 @@
+<web-app  version="3.0"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://JAVA.sun.com/xml/ns/javaee/web-app_3_0.xsd" >
+    
+    <servlet>
+        <servlet-name>inRegister</servlet-name>
+        <servlet-class>InRegister</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InRegister</servlet-name>
+        <url-pattern>/Register</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>register.html</welcome-file>
+    </welcome-file-list>
+</web-app>
