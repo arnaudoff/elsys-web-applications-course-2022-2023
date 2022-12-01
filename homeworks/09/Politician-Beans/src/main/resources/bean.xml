@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="leftPolitician" class="com.example.PoliticianBeans.LeftPolitician"/>
+    <bean id="rightPolitician" class="com.example.PoliticianBeans.RightPolitician"/>
+    <bean id="beanInvoker" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="leftPolitician"/>
+        <property name="targetMethod" value="talk"/>
+    </bean>
+
+</beans>
