@@ -12,7 +12,7 @@ public class Tweet {
     @Column(name = "id")
     private long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author", nullable = false)
     private User author;
     @Column(name = "tweet_text", nullable = false)
     private String tweetText;
