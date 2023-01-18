@@ -8,6 +8,6 @@ public class TweetDateSortDesc implements Comparator<Tweet>
 	@Override
 	public int compare (Tweet o1, Tweet o2)
 	{
-		return o2.date.compareTo(o1.date);
+		return o2.postDate.compareTo(o1.postDate);
 	}
 }

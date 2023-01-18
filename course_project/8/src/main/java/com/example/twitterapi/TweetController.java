@@ -55,7 +55,7 @@ public class TweetController
 	Tweet changeTweet(@PathVariable long id, @RequestBody String text)
 	{
 		Tweet tweet = Tweet.tweets.get(id);
-		tweet.text = text;
+		tweet.content = text;
 		return tweet;
 	}
 }

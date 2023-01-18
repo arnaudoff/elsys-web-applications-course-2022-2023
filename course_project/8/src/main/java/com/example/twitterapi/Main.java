@@ -1,27 +1,20 @@
 package com.example.twitterapi;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class Main
 {
-	public static void main(String[] args) throws InterruptedException
+	public static void main(String[] args)
 	{
-		User user = new User("Test User");
-		Tweet tweet1 = new Tweet(user.id, "Test Tweet 1");
-		sleep(1);
-		Tweet tweet2 = new Tweet(user.id, "Test Tweet 2");
-		sleep(2);
-		Tweet tweet3 = new Tweet(user.id, "Test Tweet 3");
-		sleep(5);
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		UserDAO userDAO = (UserDAO)context.getBean("userDAO");
 
-		List<Tweet> tweets = new java.util.ArrayList<>(Tweet.tweets.values());
-		tweets.sort(new TweetDateSortDesc());
-
-		for (Tweet i : tweets)
-		{
-			System.out.println(i.text);
-		}
+		User user1 = new User("Test User");
+		int count = userDAO.addUser(user1);
+		System.out.println(count + " records added");
 	}
 }

@@ -20,11 +20,17 @@ public class User
 	static Map<Long, User> usersId = new LinkedHashMap<>();
 	static Map<String, User> usersName = new LinkedHashMap<>();
 
+	public User() {}
+
 	public User (String username)
 	{
 		if (usersName.containsKey(username))
 		{
 			throw new IllegalArgumentException("Username already exists");
+		}
+		if (username.length() > 256)
+		{
+			throw new IllegalArgumentException("Username is too long");
 		}
 
 		long followerRandom = 20;
@@ -58,5 +64,13 @@ public class User
 
 		usersId.put(this.id, this);
 		usersName.put(this.username, this);
+	}
+
+	@Override
+	public String toString ()
+	{
+		return "User{" + "username='" + username + '\'' + ", registrationDate=" + registrationDate +
+		       ", followerCount=" + followerCount + ", followingCount=" + followingCount + ", tweets=" + tweets +
+		       ", id=" + id + '}';
 	}
 }
