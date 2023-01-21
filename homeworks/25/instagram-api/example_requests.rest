@@ -1,0 +1,61 @@
+POST http://localhost:8080/instagram-api-1.0-SNAPSHOT/register
+Content-Type: application/json
+
+{
+    "first_name": "Yassen",
+    "last_name": "Efremov",
+	"username": "yasaka",
+    "password": "secret"
+}
+
+
+###
+
+POST http://localhost:8080/instagram-api-1.0-SNAPSHOT/login
+Content-Type: application/json
+
+{
+	"username": "yasaka",
+    "password": "secret"
+}
+
+
+###
+
+POST http://localhost:8080/instagram-api-1.0-SNAPSHOT/posts
+Content-Type: : application/json
+
+{
+    "picture": "<image link>",
+    "description": "first post!"
+}
+
+
+###
+
+POST http://localhost:8080/instagram-api-1.0-SNAPSHOT/posts/1/comments
+Content-Type: : application/json
+
+{
+    "comment": "cool"
+}
+
+
+###
+
+PUT http://localhost:8080/instagram-api-1.0-SNAPSHOT/posts/1/comments/1
+Content-Type: : application/json
+
+{
+    "comment": "awesome"
+}
+
+
+###
+
+DELETE http://localhost:8080/instagram-api-1.0-SNAPSHOT/posts/1/comments/1
+
+
+###
+
+POST http://localhost:8080/instagram-api-1.0-SNAPSHOT/posts/1/likes
