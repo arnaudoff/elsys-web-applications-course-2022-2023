@@ -1,0 +1,41 @@
+POST http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+
+{
+	"name": "yasaka"
+}
+
+###
+
+GET http://localhost:8080/users/1 HTTP/1.1
+
+###
+
+GET http://localhost:8080/tweets/1 HTTP/1.1
+
+###
+
+POST http://localhost:8080/tweets HTTP/1.1
+Content-Type: application/json
+
+{
+	"authorId": "1",
+	"text": "Example tweet"
+}
+
+###
+
+GET http://localhost:8080/tweets/by-user/1 HTTP/1.1
+
+###
+
+DELETE http://localhost:8080/tweets/1 HTTP/1.1
+
+###
+
+PUT http://localhost:8080/tweets/2 HTTP/1.1
+Content-Type: application/json
+
+{
+	"text": "Updated example tweet"
+}
