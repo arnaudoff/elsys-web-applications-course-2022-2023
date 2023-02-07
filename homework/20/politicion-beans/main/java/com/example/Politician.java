@@ -1,6 +1,5 @@
 package com.example;
 
-public abstract class Politition {
+public abstract class Politician {
     public abstract void talk();
 }
-  

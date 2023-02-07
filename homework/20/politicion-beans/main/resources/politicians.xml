@@ -4,8 +4,8 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="left"  class="com.example.LeftPolititions"></bean>
-    <bean id="right"  class="com.example.RightPolititions"></bean>
+    <bean id="left"  class="com.example.LeftPolitician"></bean>
+    <bean id="right"  class="com.example.RightPolitician"></bean>
     <bean id = "invoker" class = "org.springframework.beans.factory.config.MethodInvokingBean">
         <property name = "targetObject" ref = "right"/>
         <property name = "targetMethod" value = "talk"/>

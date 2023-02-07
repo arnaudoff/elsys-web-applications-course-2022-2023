@@ -1,6 +1,6 @@
 package com.example;
 
-public class LeftPolititions extends Politition{
+public class LeftPolitician extends Politician {
 
     @Override
     public void talk() {
